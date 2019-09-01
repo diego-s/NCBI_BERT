@@ -254,7 +254,7 @@ class HoCProcessor(DataProcessor):
             # else:
             #  text_a = tokenization.convert_to_unicode(line[3])
             #  label = tokenization.convert_to_unicode(line[1])
-            label = tokenization.convert_to_unicode(line[0])
+            label = tokenization.convert_to_unicode(line[3])
             text_a = tokenization.convert_to_unicode(line[1])
 
             examples.append(
