@@ -275,7 +275,7 @@ class HoCProcessor(DataProcessor):
                     aspect_values.append(aspect + "_1")
                 else:
                     aspect_values.append(aspect + "_0")
-            label = tokenization.convert_to_unicode(" ".join(aspect_values))
+            label = tokenization.convert_to_unicode(",".join(aspect_values))
             text_a = tokenization.convert_to_unicode(line[1])
 
             examples.append(
