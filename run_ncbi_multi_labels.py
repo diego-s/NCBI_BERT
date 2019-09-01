@@ -215,6 +215,20 @@ class DataProcessor(object):
 class HoCProcessor(DataProcessor):
     """Processor for the CoLA data set (GLUE version)."""
 
+    def __init__(self):
+        self._aspects = [
+            "activating invasion and metastasis", 
+            "avoiding immune destruction", 
+            "cellular energetics", 
+            "enabling replicative immortality", 
+            "evading growth suppressors", 
+            "genomic instability and mutation", 
+            "inducing angiogenesis", 
+            "resisting cell death", 
+            "sustaining proliferative signaling", 
+            "tumor promoting inflammation", 
+        ]
+
     def get_train_examples(self, data_dir):
         """See base class."""
         return self._create_examples(
@@ -235,9 +249,9 @@ class HoCProcessor(DataProcessor):
         label_list = []
         # num_aspect=FLAGS.num_aspects
         aspect_value_list = FLAGS.aspect_value_list  # [-2,-1,0,1]
-        for i in range(FLAGS.num_aspects):
+        for aspect in self._aspects:
             for value in aspect_value_list:
-                label_list.append(str(i) + "_" + str(value))
+                label_list.append(aspect + "_" + str(value))
         return label_list  # [ {'0_-2': 0, '0_-1': 1, '0_0': 2, '0_1': 3,....'19_-2': 76, '19_-1': 77, '19_0': 78, '19_1': 79}]
 
     def _create_examples(self, lines, set_type):
@@ -254,7 +268,14 @@ class HoCProcessor(DataProcessor):
             # else:
             #  text_a = tokenization.convert_to_unicode(line[3])
             #  label = tokenization.convert_to_unicode(line[1])
-            label = tokenization.convert_to_unicode(line[3])
+            labels = line[3].strip().split(",")
+            aspect_values = []
+            for aspect in self._aspects:
+                if aspect in labels:
+                    aspect_values.append(aspect + "_1")
+                else:
+                    aspect_values.append(aspect + "_0")
+            label = tokenization.convert_to_unicode(" ".join(aspect_values))
             text_a = tokenization.convert_to_unicode(line[1])
 
             examples.append(
